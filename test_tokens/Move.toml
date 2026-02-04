@@ -1,0 +1,9 @@
+[package]
+name = "test_tokens"
+edition = "2024"
+
+[addresses]
+test_tokens = "0x0"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }

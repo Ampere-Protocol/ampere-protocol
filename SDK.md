@@ -65,8 +65,9 @@ Submit with wallet signing or sponsor-based execution depending on your app flow
 ```ts
 import { OrbitalSdk, createSdkConfig } from "./src/sdk";
 
+// Deployed on Sui Testnet
 const config = createSdkConfig({
-  packageId: "0xYOUR_PACKAGE_ID",
+  packageId: "0xcea0d7d35eed45dc26fbd3ec0a84378bbd95d83118b501540650e267ad42bfdf",
 });
 
 const sdk = new OrbitalSdk(config);

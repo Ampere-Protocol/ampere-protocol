@@ -902,7 +902,7 @@ fun swap_exact_out_ticks_ab<A, B, C, LP>(
     let is_last = i + 1 == tick_count;
     let tick = vector::borrow(&pool.ticks, i);
     let tick_out = balance::value(&tick.balance_b) as u128;
-    let mut out_i = if (is_last) { remaining_out } else {
+    let out_i = if (is_last) { remaining_out } else {
       (tick_out * (amount_out as u128) / total_out) as u64
     };
 
@@ -1021,7 +1021,7 @@ fun swap_exact_out_ticks_ba<A, B, C, LP>(
     let is_last = i + 1 == tick_count;
     let tick = vector::borrow(&pool.ticks, i);
     let tick_out = balance::value(&tick.balance_a) as u128;
-    let mut out_i = if (is_last) { remaining_out } else {
+    let out_i = if (is_last) { remaining_out } else {
       (tick_out * (amount_out as u128) / total_out) as u64
     };
 
@@ -1140,7 +1140,7 @@ fun swap_exact_out_ticks_ac<A, B, C, LP>(
     let is_last = i + 1 == tick_count;
     let tick = vector::borrow(&pool.ticks, i);
     let tick_out = balance::value(&tick.balance_c) as u128;
-    let mut out_i = if (is_last) { remaining_out } else {
+    let out_i = if (is_last) { remaining_out } else {
       (tick_out * (amount_out as u128) / total_out) as u64
     };
 
@@ -1259,7 +1259,7 @@ fun swap_exact_out_ticks_ca<A, B, C, LP>(
     let is_last = i + 1 == tick_count;
     let tick = vector::borrow(&pool.ticks, i);
     let tick_out = balance::value(&tick.balance_a) as u128;
-    let mut out_i = if (is_last) { remaining_out } else {
+    let out_i = if (is_last) { remaining_out } else {
       (tick_out * (amount_out as u128) / total_out) as u64
     };
 
@@ -1378,7 +1378,7 @@ fun swap_exact_out_ticks_bc<A, B, C, LP>(
     let is_last = i + 1 == tick_count;
     let tick = vector::borrow(&pool.ticks, i);
     let tick_out = balance::value(&tick.balance_c) as u128;
-    let mut out_i = if (is_last) { remaining_out } else {
+    let out_i = if (is_last) { remaining_out } else {
       (tick_out * (amount_out as u128) / total_out) as u64
     };
 
@@ -1497,7 +1497,7 @@ fun swap_exact_out_ticks_cb<A, B, C, LP>(
     let is_last = i + 1 == tick_count;
     let tick = vector::borrow(&pool.ticks, i);
     let tick_out = balance::value(&tick.balance_b) as u128;
-    let mut out_i = if (is_last) { remaining_out } else {
+    let out_i = if (is_last) { remaining_out } else {
       (tick_out * (amount_out as u128) / total_out) as u64
     };
 

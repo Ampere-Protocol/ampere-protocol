@@ -13,6 +13,12 @@ export {
   sharedObjectRefFromOwner,
   sharedObjectRefFromResponse,
 } from "./shared";
+export {
+  AMPERE_ADDRESSES,
+  SUI_SYSTEM,
+  DEFAULT_CONFIG,
+  getModuleId,
+} from "./constants";
 export { OrbitalPool3Client } from "./orbitalPool3";
 export { OrbitalVaultClient } from "./orbitalVault";
 export type {

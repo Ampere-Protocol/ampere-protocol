@@ -1,4 +1,3 @@
-import { bcs } from "@mysten/sui/bcs";
 import { Transaction, type TransactionArgument } from "@mysten/sui/transactions";
 
 import { BaseMoveClient } from "./base";
@@ -10,22 +9,6 @@ import type {
   TransactionFactory,
   VaultTypeArgs,
 } from "./types";
-
-const OrbitalTickConfigBcs = bcs.struct("OrbitalTickConfig", {
-  band_bps: bcs.u64(),
-  weight_bps: bcs.u64(),
-});
-
-const OrbitalTickConfigVecBcs = bcs.vector(OrbitalTickConfigBcs);
-
-function encodeTickConfigs(ticks: OrbitalTickConfigInput[]) {
-  return OrbitalTickConfigVecBcs.serialize(
-    ticks.map((tick) => ({
-      band_bps: tick.bandBps,
-      weight_bps: tick.weightBps,
-    })),
-  );
-}
 
 export class OrbitalVaultClient extends BaseMoveClient {
   constructor(input: {
@@ -66,7 +49,23 @@ export class OrbitalVaultClient extends BaseMoveClient {
       typeArgs: VaultTypeArgs;
     },
   ) {
-    const tickBytes = encodeTickConfigs(input.ticks);
+    // Create OrbitalTickConfig objects on-chain
+    const tickConfigs = input.ticks.map((tick) => {
+      return tx.moveCall({
+        target: this.target("new_tick_config"),
+        arguments: [
+          tx.pure.u64(tick.bandBps),
+          tx.pure.u64(tick.weightBps),
+        ],
+      });
+    });
+
+    // Create a vector of OrbitalTickConfig objects
+    const ticksVector = tx.makeMoveVec({
+      type: `${this.packageId}::${this.moduleName}::OrbitalTickConfig`,
+      elements: tickConfigs,
+    });
+
     return tx.moveCall({
       target: this.target("create_orbital_vault"),
       typeArguments: [...input.typeArgs],
@@ -75,7 +74,7 @@ export class OrbitalVaultClient extends BaseMoveClient {
         tx.pure.vector("u8", input.basePriceId),
         tx.pure.vector("u8", input.quotePriceId),
         tx.pure.id(input.poolId),
-        tx.pure(tickBytes),
+        ticksVector,
         tx.pure.u64(input.maxSkewPercent),
       ],
     });
@@ -103,14 +102,30 @@ export class OrbitalVaultClient extends BaseMoveClient {
       typeArgs: VaultTypeArgs;
     },
   ) {
-    const tickBytes = encodeTickConfigs(input.ticks);
+    // Create OrbitalTickConfig objects on-chain
+    const tickConfigs = input.ticks.map((tick) => {
+      return tx.moveCall({
+        target: this.target("new_tick_config"),
+        arguments: [
+          tx.pure.u64(tick.bandBps),
+          tx.pure.u64(tick.weightBps),
+        ],
+      });
+    });
+
+    // Create a vector of OrbitalTickConfig objects
+    const ticksVector = tx.makeMoveVec({
+      type: `${this.packageId}::${this.moduleName}::OrbitalTickConfig`,
+      elements: tickConfigs,
+    });
+
     return tx.moveCall({
       target: this.target("update_config"),
       typeArguments: [...input.typeArgs],
       arguments: [
         tx.object(input.cap),
         sharedObjectArg(tx, input.vault, true),
-        tx.pure(tickBytes),
+        ticksVector,
         tx.pure.u64(input.maxSkewPercent),
       ],
     });

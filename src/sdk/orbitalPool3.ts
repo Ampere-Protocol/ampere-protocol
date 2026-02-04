@@ -1,4 +1,3 @@
-import { bcs } from "@mysten/sui/bcs";
 import { Transaction, type TransactionObjectArgument } from "@mysten/sui/transactions";
 
 import { BaseMoveClient } from "./base";
@@ -11,22 +10,6 @@ import type {
   SwapRoute,
   TransactionFactory,
 } from "./types";
-
-const OrbitalTickConfigBcs = bcs.struct("OrbitalTickConfig", {
-  band_bps: bcs.u64(),
-  weight_bps: bcs.u64(),
-});
-
-const OrbitalTickConfigVecBcs = bcs.vector(OrbitalTickConfigBcs);
-
-function encodeTickConfigs(ticks: OrbitalTickConfigInput[]) {
-  return OrbitalTickConfigVecBcs.serialize(
-    ticks.map((tick) => ({
-      band_bps: tick.bandBps,
-      weight_bps: tick.weightBps,
-    })),
-  );
-}
 
 const EXACT_IN_FUNCTIONS: Record<SwapRoute, string> = {
   AtoB: "swap_a_for_b_exact_in",
@@ -83,7 +66,23 @@ export class OrbitalPool3Client extends BaseMoveClient {
       typeArgs: Pool3TypeArgs;
     },
   ) {
-    const tickBytes = encodeTickConfigs(input.ticks);
+    // Create OrbitalTickConfig objects on-chain
+    const tickConfigs = input.ticks.map((tick) => {
+      return tx.moveCall({
+        target: this.target("new_tick_config"),
+        arguments: [
+          tx.pure.u64(tick.bandBps),
+          tx.pure.u64(tick.weightBps),
+        ],
+      });
+    });
+
+    // Create a vector of OrbitalTickConfig objects
+    const ticksVector = tx.makeMoveVec({
+      type: `${this.packageId}::${this.moduleName}::OrbitalTickConfig`,
+      elements: tickConfigs,
+    });
+
     return tx.moveCall({
       target: this.target("create_pool3"),
       typeArguments: [...input.typeArgs],
@@ -92,7 +91,7 @@ export class OrbitalPool3Client extends BaseMoveClient {
         tx.pure.u8(input.decimalsA),
         tx.pure.u8(input.decimalsB),
         tx.pure.u8(input.decimalsC),
-        tx.pure(tickBytes),
+        ticksVector,
       ],
     });
   }

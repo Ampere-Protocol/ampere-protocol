@@ -10,7 +10,7 @@ deepbook = { git = "https://github.com/MystenLabs/deepbookv3.git", subdir = "pac
 [dependencies.pyth]
 git = "https://github.com/pyth-network/pyth-crosschain.git"
 subdir = "target_chains/sui/contracts"
-rev = "sui-contract-mainnet"
+rev = "sui-contract-testnet"
  
 [dependencies.wormhole]
 git = "https://github.com/wormhole-foundation/wormhole.git"
