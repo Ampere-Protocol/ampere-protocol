@@ -10,6 +10,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@mysten/deepbook-v3": "^1.0.1"
+    "@mysten/deepbook-v3": "^1.0.1",
+    "@mysten/sui": "^2.1.0"
   }
 }

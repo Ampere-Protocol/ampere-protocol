@@ -121,7 +121,7 @@ public fun deposit<BaseAsset, QuoteAsset, T>(
     deposit_value * (total_lp_supply as u256) / total_vault_value
   };
 
-  assert!(lp_tokens_to_mint <= (0xFFFFFFFFFFFFFFFF as u256), EMintAmountTooLarge);
+  assert!(lp_tokens_to_mint <= ((0xFFFFFFFFFFFFFFFFu64) as u256), EMintAmountTooLarge);
 
   vault.balance_manager.deposit(base_coin, ctx);
   vault.balance_manager.deposit(quote_coin, ctx);  
@@ -155,8 +155,8 @@ public fun withdraw<BaseAsset, QuoteAsset, T>(
   let base_to_withdraw = (total_base_balance as u256) * (lp_amount as u256) / (total_lp_supply as u256);
   let quote_to_withdraw = (total_quote_balance as u256) * (lp_amount as u256) / (total_lp_supply as u256);
 
-  assert!(base_to_withdraw <= (0xFFFFFFFFFFFFFFFF as u256), EWithdrawAmountTooLarge);
-  assert!(quote_to_withdraw <= (0xFFFFFFFFFFFFFFFF as u256), EWithdrawAmountTooLarge);
+  assert!(base_to_withdraw <= ((0xFFFFFFFFFFFFFFFFu64) as u256), EWithdrawAmountTooLarge);
+  assert!(quote_to_withdraw <= ((0xFFFFFFFFFFFFFFFFu64) as u256), EWithdrawAmountTooLarge);
 
   let base_coin = vault.balance_manager.withdraw<BaseAsset>(base_to_withdraw as u64, ctx);
   let quote_coin = vault.balance_manager.withdraw<QuoteAsset>(quote_to_withdraw as u64, ctx);
