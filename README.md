@@ -122,6 +122,44 @@ const tx = sdk.pool3.swapExactInTx({
 
 ---
 
+## 💡 Liquidity Provider Strategies
+
+For liquidity providers, Ampere offers unprecedented flexibility through **Multi-Tick Configurations**. Understanding how to distribute liquidity across different price bands is crucial for optimizing returns.
+
+### 📊 Tick Configuration Framework
+
+Ampere uses a **weighted tick system** where LPs allocate capital across multiple price bands:
+
+```typescript
+ticks: [
+  { bandBps: 50, weightBps: 6000 },   // 0.5% band with 60% of capital
+  { bandBps: 200, weightBps: 4000 },  // 2% band with 40% of capital
+]
+```
+
+### 🎯 Strategy Selection Guide
+
+| Pool Type | Recommended Strategy | Expected APR | Risk Level |
+|-----------|---------------------|--------------|------------|
+| **Stablecoins** (USDC-USDT-USDE) | Conservative (10-25 bps) | 15-25% | Low |
+| **Low Volatility** (LSTs) | Balanced (50-200 bps) | 12-20% | Medium |
+| **High Volatility** (SUI-BTC-ETH) | Wide Range (200-500 bps) | 10-40% | High |
+
+### 📚 Comprehensive Strategies
+
+For detailed tick configuration strategies, capital allocation models, and risk management approaches, see our dedicated guide:
+
+**📖 [TICK STRATEGIES GUIDE](./TICK_STRATEGIES.md)**
+
+This comprehensive resource covers:
+- ✅ Pre-built strategies for different asset classes
+- ✅ Risk/reward analysis for each configuration
+- ✅ Dynamic rebalancing frameworks
+- ✅ Advanced multi-tick optimization techniques
+- ✅ Real-world examples with expected APRs
+
+---
+
 ## 🗺️ Roadmap: The Path to Mainnet
 
 *   **Phase 1 (Hackathon):** Newton-Raphson Move Implementation, 3-Asset Base Layer, TS SDK.
